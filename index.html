@@ -35,7 +35,7 @@
 
 <p>We calculated days since last inspection and noticed that Risk 1 establishments do get inspected more frequently than lower risk restaurants. We surmised that the length of time between inspections could be an important predictor of inspection outcome.</p>
 
-<p><img src="http://i.imgur.com/aQJvYLZ.png" alt="test alttext"></p>
+<p><img src="http://i.imgur.com/aQJvYLZ.png" alt=""></p>
 
 <p>Multiple types of inspection are possible, but many inspections such as those for establishing licensure must occur at certain times and are not able to be prioritized by our model. We narrowed our focus to inspections that occurred due to regular canvassing, as a result of a complaint, or due to suspected food poisoning. Inspection outcomes fall into three categories: pass, pass with conditions, and fail. The Chicago/Allstate team collapsed this into pass/fail, but we kept the outcome multiclass to see if this added nuance would aid the predictive power of our model. We also removed all inspections where no outcome was listed due to the establishment going out of business or being under renovations. After this filtering, we had 61,727 records remaining.  </p>
 
@@ -97,7 +97,7 @@
 
 <p>To quantify the performance of our models in a more practical sense, we trained our models on our data through 2015 then had them predict inspection outcomes for the first nine months of 2016. We sorted their monthly results by risk of failure and explored how many failures were caught in the first half of the month. This metric aligns with our project goal of detecting failures sooner to minimize risk to the public. As seen in the figure below, our logistic regression and Random Forest models both did significantly better than Chicago's current method, detecting on average 25% more failures in the first half of the month. The Random Forest model outperforms logistic regression in 5 out of 9 months of our test set.</p>
 
-<p><img src="http://i.imgur.com/KLATIQD.png" alt=""></p>
+<p></p><img src="http://i.imgur.com/KLATIQD.png" alt="">
 
 <h1>
 <a id="results" class="anchor" href="#results" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Results</h1>
