@@ -52,15 +52,21 @@
 
 <p>We first defined our performance metric against which all our models would be evaluated.  We aimed to maximize the likelihood of the observed data given the model.  For computational reasons, we are technically minimizing the negative log likelihood as a loss function. The log likelihood function adds a positive number with a magnitude of roughly 1 for each additional observation. This is much less likely to hit machine precision issues than multiplying many numbers smaller than 1 as in the likelihood function, which gets quite small quite fast.  </p>
 
-<p>INSERT ACTUAL EQUATION USED HERE? DOES THIS SUPPORT LATEX?  </p>
-
 <p>The model assigns a probability to each of the three classes of inspection outcome, and then the probability of the observed outcome (according to the model) is then just the class probability of the observed outcome. The joint probability of all the observed outcomes, assuming they are independent, is the product of the individual outcome probabilities.  We are scoring the models based on this joint probability of obtaining the observed data from that model.  This metric has two advantages:  it is the same metric that logistic regression models maximize and it naturally extends to the multiclass classification we are doing here. All visuals in our model selection process plot this likelihood using the characteristic probability, which represents an average probability of observing the data across all the observations.  Specifically, if model M has characteristic probability P, then the model that always predicts the observed outcome with probability P will have the same likelihood.  </p>
 
-<p>Our first baseline model simply uses the inspection outcome frequencies from our sample to make predictions.  Regardless of the inspection, it predicts the same class probabilities.  This gave a characteristic probability of 0.43 which we sought to improve upon.  We added the day of the week, month of the year, and zip code to our model, but cross-validation revealed that this model overfits our data.</p>
+<p>We aim to maximize the likelihood on out-of-sample data.  However, we are dealing with time-series data, so simple K-fold cross-validation would be invalid, using information from the future to inform the predictions, whereas our use-case is to train the model on existing data to predict values in the future.  We therefore used the sklearn package TimeSeriesCV to do the cross-validation.  For n_splits, this makes n_splits testing sets, and for each one the model is trained on all past data but no future data.  </p>
 
-<p><img src="http://i.imgur.com/PgYnAwK.png" alt=""></p>
+<h2>
+<a id="baseline-models" class="anchor" href="#baseline-models" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Baseline Models</h2>
 
-<p>We then fit a series of logistic regression models where we added the month, year, and zip code. Adding simply the day of the week did not help, but year did, suggesting some long-term trends in inspection outcome. The inclusion of zip code greatly improved our model’s predictive power.  </p>
+<p>Our first baseline model simply uses the inspection outcome frequencies from our sample to make predictions.  Regardless of the inspection, it predicts the same class probabilities.  This gave a characteristic probability of 0.40 which we sought to improve upon.  We added the day of the week, month of the year, and zip code to our model, but cross-validation revealed that this model overfits our data.</p>
+
+<p><img src="http://i.imgur.com/PgYnAwK.png" alt="">
+~<a href="http://imgur.com/DbF2geH.png"></a></p>
+
+<p>(Technical note: The above plot uses all inspection types, not just canvasses, complaints, and suspected food poisoning.  That is why the characteristic probabilities are elevated compared to all future plots.)</p>
+
+<p>We then fit a series of logistic regression models where we added the month, year, and zip code. None of these factors helped the model.  Year, in particular, hurt the model particularly badly.  This happened because, using the time-series based cross-validation, there are never many training samples of the same year in the testing data.  No further models used year as a predictor.</p>
 
 <p><img src="http://i.imgur.com/YCljLvZ.png" alt=""></p>
 
