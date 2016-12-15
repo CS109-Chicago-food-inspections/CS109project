@@ -70,6 +70,10 @@
 
 <p><img src="http://i.imgur.com/lO1CN9G.png" alt=""></p>
 
+<p>Adding all these factors together led to a better model, indicating that they have independent information and we are not yet in the domain of overfitting.</p>
+
+<p><img src="http://i.imgur.com/wjR9dns.png" alt=""></p>
+
 <p>We next tried to improve this model by adding recent nearby sanitation complaints and weather data.  For the sanitation complaints, we took complaints within 0.5km (much smaller than the ~3km radius we used before) and within the last week.  For weather, we looked at both the day’s high and the mean high from the last week.  Both of these additions helped the model perform better, although both were weak.  </p>
 
 <p><img src="http://i.imgur.com/Ve7DBRs.png" alt=""></p>
@@ -85,7 +89,21 @@
 <h2>
 <a id="coding-location" class="anchor" href="#coding-location" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Coding Location</h2>
 
-<p>In the</p>
+<p>In the models described above, we coded location using the zip codes, after eliminating the 40% or so of zip codes that did not have 1000 inspections (they were coded together as "other").  This has the benefit of roughly scaling to population size, as city-center zip codes cover much less area, as well as convenience as it was already coded.  This factor picks up the fact that the probability of passing an inspection depends on where the restaurant is located, i.e. there are "good" parts of town and "bad" parts of town with respect to food inspections.</p>
+
+<p>We could alternatively use nearby sanitation complaints as a proxy for "good" and "bad" parts of town, under the hypothesis that more nearby recent sanitation complaints indicate a part of town that is more likely to fail food inspections.  This has the advantage of continuously varying throughout the city, but the disadvantage of being only a proxy for passing inspections rather than a direct measure of past performance.  Below, we see that as the number of nearby recent complaints increases, the probability of passing an inspection falls and the probability of critical failures rises.</p>
+
+<p><img src="http://i.imgur.com/2spzQA8.png" alt=""></p>
+
+<p>When we tried a model of just zip codes or just sanitation complaints, the sanitation complaints actually outperformed the zip codes.  When adding both to the model, it did not perform any better, indicating that the two measures capture very similar information.  This is likely why we did not see improvements to the model above using sanitation complaints: zip codes were already capturing the bulk of the spatial information.</p>
+
+<p><img src="http://i.imgur.com/mpO73DD.png" alt=""></p>
+
+<p>We next wondered whether we could capture the benefits of both approaches: a measure that continuously varies through the city but that directly measures past performance on inspections.  We tried using Kernel Density Estimation to map the city.  For each passed inspection, we drew a Gaussian distribution centered at that location with variance 1.5km.  We did this for each passed inspection in a period prior to the testing period, making a map of small bumps.  We made analogous maps for conditional fails and critical fails.  Then, for a future inspection, we compared the height of the passing map to the conditional fail to the critical fail, giving a measure of how likely it is that a restaurant in that area fails.  </p>
+
+<p>A model using the KDE approach to encoding the spatial information outperforms both the sanitation and zip approaches.  Unfortunately, we were not able to get this approach working early enough to incorporate it into a logistic regression model and add it to the other features.  However, this is a very promising direction for improving our model.</p>
+
+<p>~<a href="http://i.imgur.com/ubrgLdP.png"></a></p>
 
 <h2>
 <a id="alternative-models" class="anchor" href="#alternative-models" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alternative Models</h2>
