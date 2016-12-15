@@ -56,27 +56,23 @@
 
 <p>We aim to maximize the likelihood on out-of-sample data.  However, we are dealing with time-series data, so simple K-fold cross-validation would be invalid, using information from the future to inform the predictions, whereas our use-case is to train the model on existing data to predict values in the future.  We therefore used the sklearn package TimeSeriesCV to do the cross-validation.  For n_splits, this makes n_splits testing sets, and for each one the model is trained on all past data but no future data.  </p>
 
-<h2>
-<a id="baseline-models" class="anchor" href="#baseline-models" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Baseline Models</h2>
-
 <p>Our first baseline model simply uses the inspection outcome frequencies from our sample to make predictions.  Regardless of the inspection, it predicts the same class probabilities.  This gave a characteristic probability of 0.40 which we sought to improve upon.  We added the day of the week, month of the year, and zip code to our model, but cross-validation revealed that this model overfits our data.</p>
 
-<p><img src="http://i.imgur.com/PgYnAwK.png" alt="">
-<img src="http://i.imgur.com/DbF2geH.png" alt=""></p>
+<p><img src="http://i.imgur.com/PgYnAwK.png" alt=""></p>
 
 <p>(Technical note: The above plot uses all inspection types, not just canvasses, complaints, and suspected food poisoning.  That is why the characteristic probabilities are elevated compared to all future plots.)</p>
 
-<p>We then fit a series of logistic regression models where we added the month, year, and zip code. None of these factors helped the model.  Year, in particular, hurt the model particularly badly.  This happened because, using the time-series based cross-validation, there are never many training samples of the same year in the testing data.  No further models used year as a predictor.</p>
+<p>We then fit a series of logistic regression models where we added the month, year, and zip code. None of these factors helped the model.  Year, in particular, hurt the model particularly badly.  This happened because, using the time-series based cross-validation, there are never many training samples of the same year in the testing data. No further models include year as a predictor.</p>
 
-<p><img src="http://i.imgur.com/YCljLvZ.png" alt=""></p>
+<p><img src="http://i.imgur.com/DbF2geH.png" alt=""></p>
 
-<p>Our next series of models took this information and incorporated risk, facility type, and inspection type. The type of inspection being carried out holds the most predictive power of these variables with high-risk inspections more often resulting in critical failures. Including risk rating and facility type also serve to improve our model. The model that included these three additional features performed much better, both in-sample and out-of-sample (cross-validation likelihood).  </p>
+<p>Our next series of models took this information and incorporated risk, facility type, and inspection type. The type of inspection being carried out holds the most predictive power of these variables with high-risk inspections more often resulting in critical failures. Including risk rating and facility type also serve to improve our model. The model that included these three additional features performed better, both in-sample and out-of-sample (cross-validation likelihood).  </p>
 
-<p><img src="http://i.imgur.com/atDgLJu.png" alt=""></p>
+<p><img src="http://i.imgur.com/lO1CN9G.png" alt=""></p>
 
-<p>We next tried to improve this model by adding recent nearby sanitation complaints and weather data.  For the sanitation complaints, we took complaints within 0.5km (much smaller than the ~3km radius we used before) and within the last week.  For weather, we looked at both the day’s high and the mean high from the last week.  However, none of these three features helped the models perform better than the models that used only the inspection data.  </p>
+<p>We next tried to improve this model by adding recent nearby sanitation complaints and weather data.  For the sanitation complaints, we took complaints within 0.5km (much smaller than the ~3km radius we used before) and within the last week.  For weather, we looked at both the day’s high and the mean high from the last week.  Both of these additions helped the model perform better, although both were weak.  </p>
 
-<p><img src="http://i.imgur.com/3PehbDy.png" alt=""></p>
+<p><img src="http://i.imgur.com/Ve7DBRs.png" alt=""></p>
 
 <p>The inclusion of review and price data scraped from Yelp for a subset of our inspection data did not seem to improve the predictive power of our model. It is possible that this could be more significant over a larger dataset or with more complete data, but for now we will not include it in our final model. Further work will need to be done to test the hypothesis suggested during our poster session that more expensive establishments have more to lose from a failure and would thus take additional precautions to fail at a lower rate. The converse could also be true, where a low price establishment operates with razor-thin margins and a closure could permanently shutter the location therefore driving more scrupulous preventative measures.</p>
 
@@ -85,6 +81,14 @@
 <p>To delve into inspection data further, we added time since last inspection, the result of the previous inspection, and the mean of all previous results. This led to our final logistic regression model that included location by zip code, inspection type, facility type, and risk rating alongside our newly added predictors.  </p>
 
 <p><img src="http://i.imgur.com/7MAEOLX.png" alt=""></p>
+
+<h2>
+<a id="coding-location" class="anchor" href="#coding-location" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Coding Location</h2>
+
+<p>In the</p>
+
+<h2>
+<a id="alternative-models" class="anchor" href="#alternative-models" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alternative Models</h2>
 
 <p>After being satisfied that we maximized the performance of our logistic regression model, we attempted to fit several new models using different classifiers. We first attempted to use linear and quadratic discriminant analysis, but these did not perform nearly as well as logistic regression. This is likely due to their difficulty dealing with large amounts of categorical data. We next attempted a k-nearest neighbors approach to our classification problem. As the number of nearest neighbors considered increased past 75, k-NN performed roughly as well as our logistic regression model. Two issues arose, however: overfitting of our data was detected and the model was very computationally expensive to run.</p>
 
