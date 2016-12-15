@@ -12,3 +12,5 @@ Original data downloaded from:
   
 ## Code
 All notebooks used in final website analysis are included in the "analysis" folder.
+
+YelpAPI "request" and "search" functions taken from https://github.com/Yelp/yelp-fusion/blob/master/fusion/python/sample.py
