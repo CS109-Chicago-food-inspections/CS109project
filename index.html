@@ -132,7 +132,13 @@
 <p><img src="http://i.imgur.com/nWdjmpG.png" alt=""></p>
 
 <h1>
-<a id="results" class="anchor" href="#results" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Results</h1>
+<a id="future-directions" class="anchor" href="#future-directions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Future Directions</h1>
+
+<p>As we mentioned above, a very promising direction to improve our model is to incorporate the local history of passing inspections based the Kernel Density Estimates.  These outperformed both the sanitation and zip-based encoding of spatial information and would likely be a very helpful addition to the model.</p>
+
+<p>To improve our model at this point, we could explore more nuanced information about establishments such as price and rating that were only partially available to us at the time of this analysis. We also found evidence that sanitation data may be helpful after restricting ourselves to inspections as a result of canvass or complaints, so we could see if this is beneficial on top of the KDE location information.  </p>
+
+<p>We could explore interactions between the main effects we present here since, for example, temperature may have a different magnitude of effect at different locations. We could improve our model if we had access to data regarding what inspector carried out which inspection, but this is not made public by the City of Chicago. Inspection outcomes nested within inspectors would give us an interesting multilevel modeling problem to explore. We could also attempt to utilize key phrases in user reviews of establishments such as "dirty fork" or "smelled funny" to detect potential violations well before they might be caught by the baseline model. </p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/CS109-Chicago-food-inspections/CS109project">CS109a Chicago Food Inspections</a> is maintained by <a href="https://github.com/CS109-Chicago-food-inspections">CS109-Chicago-food-inspections</a>.</span>
