@@ -1,5 +1,8 @@
 # CS109a chicago Food Inspections
 
+## Website
+Please visit our final report: https://cs109-chicago-food-inspections.github.io/CS109project/
+
 ## Data
 Cleaned data can be found in the "data" folder.
 Original data downloaded from:
